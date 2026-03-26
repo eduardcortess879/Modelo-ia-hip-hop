@@ -1,4 +1,4 @@
-/* 📱 MÓVIL (pantallas pequeñas) */
+/* MÓVIL (pantallas pequeñas) */
 @media (max-width: 576px) {
 
   .mensaje {
@@ -20,14 +20,14 @@
   }
 }
 
-/* 📱 TABLET */
+/* TABLET */
 @media (min-width: 577px) and (max-width: 992px) {
   .mensaje {
     max-width: 80%;
   }
 }
 
-/* 💻 DESKTOP GRANDE */
+/* DESKTOP GRANDE */
 @media (min-width: 1200px) {
   #chat {
     max-width: 900px;
