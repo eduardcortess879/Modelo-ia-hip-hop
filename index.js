@@ -2,7 +2,6 @@ import express from "express";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
 import path from "path";
-import { fileURLToPath } from "url";
 
 dotenv.config();
 
@@ -11,17 +10,13 @@ const app = express();
 /* Middleware */
 app.use(express.json());
 
-/* Health check (Railway) */
+/* Health check */
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
-/* Configuración de rutas */
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-/* Ruta del frontend */
-const frontendPath = path.join(__dirname, "frontend");
+/* Ruta del frontend (FORMA SEGURA EN RAILWAY) */
+const frontendPath = path.join(process.cwd(), "frontend");
 
 /* Servir archivos estáticos */
 app.use(express.static(frontendPath));
@@ -88,7 +83,7 @@ Pregunta: ${pregunta}`,
   }
 });
 
-/* Puerto (IMPORTANTE para Railway) */
+/* Puerto Railway */
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, "0.0.0.0", () => {
