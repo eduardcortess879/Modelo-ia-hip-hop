@@ -26,7 +26,7 @@ const frontendPath = path.join(__dirname, "frontend");
 app.use(express.static(frontendPath));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
+  res.send("Servidor activo 🚀");
 });
 
 /* Endpoint IA */
@@ -87,6 +87,6 @@ Pregunta: ${pregunta}`,
 /* Puerto (CLAVE para Railway) */
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Servidor corriendo en puerto ${PORT} 🚀`);
+app.get("/", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
