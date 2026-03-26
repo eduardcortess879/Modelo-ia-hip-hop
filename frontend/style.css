@@ -1,0 +1,89 @@
+/**
+ * ESTILOS DEL CHAT - AGENTE HIP HOP
+ * 
+ * Descripción:
+ * Estilos personalizados para la interfaz tipo chat.
+ * Incluye scrollbar, mensajes, animaciones y mejoras UX.
+ */
+
+/**
+ * SCROLL PERSONALIZADO=
+ * 
+ * Aplica solo en navegadores WebKit (Chrome, Edge, etc.)
+ * Mejora la estética del contenedor de chat.
+ */
+#chat::-webkit-scrollbar {
+  width: 6px; /* Grosor del scroll */
+}
+
+#chat::-webkit-scrollbar-thumb {
+  background: #444; /* Color del scroll */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+/**
+ * ESTILO GENERAL DE MENSAJES
+ * 
+ * Clase base para todos los mensajes (usuario y bot)
+ */
+.mensaje {
+  max-width: 75%; /* Limita ancho del mensaje */
+  padding: 12px; /* Espaciado interno */
+  border-radius: 12px; /* Bordes redondeados */
+  margin-bottom: 10px; /* Separación entre mensajes */
+
+  /**
+   * Animación al aparecer
+   */
+  animation: fadeIn 0.2s ease-in;
+}
+
+/**
+ * MENSAJE DEL USUARIO=
+ * 
+ * Alineado a la derecha
+ * Color principal (Bootstrap primary)
+ */
+.usuario {
+  background: #0d6efd; /* Azul */
+  color: white;
+  margin-left: auto; /* Empuja el mensaje a la derecha */
+}
+
+/**
+ * MENSAJE DEL BOT
+ * 
+ * Alineado a la izquierda
+ * Color oscuro neutro
+ */
+.bot {
+  background: #2b2b2b;
+  color: #e5e5e5;
+  margin-right: auto; /* Empuja a la izquierda */
+}
+
+/**
+ * ANIMACIÓN DE ENTRADA
+ * 
+ * Hace que los mensajes aparezcan suavemente
+ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px); /* Ligeramente abajo */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* Posición final */
+  }
+}
+
+/**
+ * INPUT (FOCUS)
+ * 
+ * Mejora la experiencia visual al enfocar el input
+ */
+input:focus {
+  box-shadow: none !important; /* Elimina sombra default */
+  border-color: #0d6efd !important; /* Color azul activo */
+}
