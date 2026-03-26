@@ -20,6 +20,10 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 /**
  * Carga variables de entorno desde .env
  */
@@ -181,8 +185,8 @@ Pregunta: ${pregunta}`,
  *
  * Usa el puerto asignado por Railway o 3000 en local
  */
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
-app.listen(PORT, () => {
-  console.log(`Agente corriendo en puerto ${PORT} 🚀`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });
