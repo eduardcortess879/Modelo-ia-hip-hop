@@ -25,14 +25,19 @@ import { fileURLToPath } from "url";
  */
 dotenv.config();
 
-app.get("/health", (req, res) => {
-  res.status(200).send("OK");
-});
-
 /**
  * Inicialización de la aplicación Express
  */
 const app = express();
+
+/* ✅ Rutas básicas para Railway */
+app.get("/", (req, res) => {
+  res.status(200).send("Servidor activo 🚀");
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 /**
  * MIDDLEWARES
@@ -55,10 +60,10 @@ app.use(express.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(process.cwd(), "frontend")));
-app.get("/", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "frontend/index.html"));
-});
+//app.use(express.static(path.join(process.cwd(), "frontend")));
+//app.get("/", (req, res) => {
+  //res.sendFile(path.join(process.cwd(), "frontend/index.html"));
+//});
 
 /**
  * ENDPOINT: POST /preguntar=
@@ -185,7 +190,7 @@ Pregunta: ${pregunta}`,
  *
  * Usa el puerto asignado por Railway o 3000 en local
  */
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
