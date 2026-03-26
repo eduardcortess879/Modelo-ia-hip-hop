@@ -20,14 +20,14 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 
-app.get("/health", (req, res) => {
-  res.status(200).send("OK");
-});
-
 /**
  * Carga variables de entorno desde .env
  */
 dotenv.config();
+
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 
 /**
  * Inicialización de la aplicación Express
