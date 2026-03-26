@@ -11,7 +11,7 @@ const app = express();
 /* Middleware */
 app.use(express.json());
 
-/* Rutas base (para Railway) */
+/* Health check (Railway) */
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
@@ -20,13 +20,15 @@ app.get("/health", (req, res) => {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/* Servir frontend */
+/* Ruta del frontend */
 const frontendPath = path.join(__dirname, "frontend");
 
+/* Servir archivos estáticos */
 app.use(express.static(frontendPath));
 
+/* Ruta principal */
 app.get("/", (req, res) => {
-  res.send("Servidor activo 🚀");
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
 
 /* Endpoint IA */
@@ -79,14 +81,16 @@ Pregunta: ${pregunta}`,
     });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
+    console.error("ERROR:", error);
+    res.status(500).json({
+      error: error.message,
+    });
   }
 });
 
-/* Puerto (CLAVE para Railway) */
+/* Puerto (IMPORTANTE para Railway) */
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Servidor corriendo en puerto ${PORT} 🚀`);
 });
