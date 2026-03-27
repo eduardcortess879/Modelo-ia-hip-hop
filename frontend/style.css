@@ -39,3 +39,35 @@
     margin: 0 auto;
   }
 }
+
+/* CONTENEDOR CHAT */
+#chat {
+  display: flex;
+  flex-direction: column;
+}
+
+/* MENSAJES BASE */
+.mensaje {
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 70%;
+  margin-bottom: 10px;
+}
+
+/* USUARIO (derecha, azul) */
+.usuario {
+  align-self: flex-end;
+  background-color: #0d6efd;
+  color: white;
+}
+
+/* BOT (izquierda, gris) */
+.bot {
+  align-self: flex-start;
+  background-color: #2c2f33;
+  color: #ddd;
+}
+
+.mensaje {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
