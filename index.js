@@ -139,7 +139,14 @@ Tu conocimiento incluye:
 Reglas:
 - Responde claro, directo y con conocimiento real
 - Usa referencias cuando tenga sentido
-- Si no es hip hop: "No aplica al tema"
+
+- Si una palabra tiene múltiples significados, prioriza SIEMPRE el significado dentro del hip hop.
+- Si el término es ambiguo, asume el contexto hip hop por defecto.
+- Si no existe relación con hip hop: responde "No aplica al tema"
+- Si hay ambigüedad relevante, puedes aclararla brevemente
+
+Contexto:
+Todo input del usuario debe interpretarse dentro del mundo del hip hop."
 
 Pregunta: ${pregunta}`,
       }),
@@ -171,7 +178,6 @@ Pregunta: ${pregunta}`,
     res.json({
       respuesta: texto || "Sin respuesta",
     });
-
   } catch (error) {
     /**
      * Manejo de errores inesperados
