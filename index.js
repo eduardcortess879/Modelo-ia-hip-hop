@@ -117,7 +117,7 @@ app.post("/preguntar", async (req, res) => {
 
     /**
      * =========================
-     * 1. GENERAR TEXTO
+     * GENERAR TEXTO
      * =========================
      */
     const response = await fetch("https://api.openai.com/v1/responses", {
@@ -154,9 +154,20 @@ REGLA CRÍTICA:
 - No hagas preguntas innecesarias.
 
 FORMATO:
-- Usa tablas SOLO si es necesario
-- HTML: <table>, <tr>, <td>, <th>
-- Máximo 1 tabla
+
+- Cuando muestres listas de canciones, álbumes o datos estructurados:
+  - DEBES usar SIEMPRE HTML real
+  - NO uses markdown
+  - NO uses texto con "|"
+  - NO uses "##" ni listas simuladas
+
+- Estructura obligatoria:
+<table>
+<tr><th>Columna</th></tr>
+<tr><td>Dato</td></tr>
+</table>
+
+- Es un ERROR usar cualquier formato que no sea HTML cuando se requiere tabla
 
 SALIDA:
 - No expliques contexto
@@ -191,7 +202,7 @@ SALIDA:
     }
     /**
      * =========================
-     * 4. RESPUESTA FINAL
+     * RESPUESTA FINAL
      * =========================
      */
     res.json({
