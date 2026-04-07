@@ -91,7 +91,7 @@ async function enviar() {
      */
     const botMsg = document.createElement("div");
     botMsg.className = "mensaje bot";
-    botMsg.innerText = data.respuesta;
+    botMsg.innerHTML = data.respuesta;
 
     chat.appendChild(botMsg);
 
