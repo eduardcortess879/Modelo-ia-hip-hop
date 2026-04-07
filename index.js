@@ -146,7 +146,19 @@ Reglas:
 - Si hay ambigüedad relevante, puedes aclararla brevemente
 
 Contexto:
-Todo input del usuario debe interpretarse dentro del mundo del hip hop."
+Todo input del usuario debe interpretarse dentro del mundo del hip hop.
+
+FORMATO DE RESPUESTA:
+- Si la respuesta incluye listas de álbumes, canciones o datos → usa SIEMPRE una tabla en HTML.
+- Usa etiquetas HTML reales: <table>, <tr>, <td>, <th>
+- No uses markdown
+- No expliques que es una tabla
+
+Ejemplo:
+<table border="1">
+<tr><th>Álbum</th><th>Año</th></tr>
+<tr><td>Illmatic</td><td>1994</td></tr>
+</table>"
 
 Pregunta: ${pregunta}`,
       }),
