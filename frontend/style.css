@@ -35,3 +35,32 @@
   flex-direction: column;
   justify-content: flex-start; /* 🔥 clave */
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  padding: 10px 15px;
+  text-align: left;
+}
+
+th {
+  background-color: #1e1e1e;
+  color: #fff;
+  font-weight: bold;
+}
+
+td {
+  background-color: #2a2a2a;
+}
+
+tr:nth-child(even) td {
+  background-color: #242424;
+}
+
+table, th, td {
+  border: 1px solid #444;
+}
