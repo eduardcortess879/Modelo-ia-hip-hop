@@ -122,12 +122,23 @@ app.post("/preguntar", async (req, res) => {
         model: "gpt-4o-mini",
 
         /**
-         * Prompt del agente
+         * Prompt
          */
         input: `PRIORIDAD DE INTERPRETACIÓN:
 1. Siempre intenta encontrar una interpretación dentro del hip hop.
 2. Si el término es ambiguo, genera una interpretación razonable dentro del contexto hip hop.
 3. SOLO si es completamente imposible relacionarlo → "No aplica al tema".
+
+CONTEXTO CONVERSACIONAL:
+
+- Debes recordar el tema de la conversación actual.
+- Si el usuario hace una pregunta de seguimiento (ej: "dame el listado", "y sus canciones", "y el tracklist"):
+  - Asume que se refiere al último artista, álbum o tema mencionado.
+  - NO pidas aclaración innecesaria.
+
+- SOLO pide aclaración si hay múltiples posibles referencias activas y es realmente ambiguo.
+
+- Prioriza continuidad antes que respuestas genéricas.
 
 REGLAS ADICIONALES:
 - NO respondas "No aplica al tema" sin intentar al menos una interpretación.
