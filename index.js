@@ -32,6 +32,9 @@ dotenv.config();
  */
 const app = express();
 
+//Historial del chat
+let chatHistory = [];
+
 /**
  * MIDDLEWARES=
  */
@@ -101,6 +104,11 @@ app.post("/preguntar", async (req, res) => {
   try {
     const { pregunta } = req.body;
 
+    chatHistory.push({
+      role: "user",
+      content: pregunta,
+    });
+
     if (!pregunta) {
       return res.status(400).json({
         error: "Falta la pregunta",
@@ -120,11 +128,10 @@ app.post("/preguntar", async (req, res) => {
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-
-        /**
-         * Prompt
-         */
-        input: `Eres un experto en cultura hip hop y rap.
+        input: [
+          {
+            role: "system",
+            content: `Eres un experto en cultura hip hop y rap.
 
 Tu conocimiento incluye:
 - Historia del hip hop
@@ -132,65 +139,32 @@ Tu conocimiento incluye:
 - Canciones y tracklists
 - Cultura y técnicas del rap
 
-
 PRIORIDAD DE INTERPRETACIÓN:
-
-1. Interpreta SIEMPRE el input dentro del contexto del hip hop.
+1. Interpreta SIEMPRE el input dentro del hip hop.
 2. Si es ambiguo, asume una interpretación razonable dentro del rap.
 3. SOLO si es imposible relacionarlo → "No aplica al tema".
 
-
 CONTEXTO:
-
-- Usa el contexto más reciente de la conversación.
-- Las preguntas cortas (ej: "dame el listado", "y las canciones") dependen del último tema mencionado.
-
-- El último álbum, artista o tema mencionado por el usuario es la referencia actual.
-- Si el usuario menciona uno nuevo, reemplaza el anterior.
-
-- NO pidas aclaración si hay un contexto claro.
-
+- Usa el contexto más reciente.
+- Las preguntas cortas dependen del último tema mencionado.
+- No pidas aclaración si hay contexto claro.
 
 REGLA CRÍTICA:
+- Completa preguntas incompletas usando el contexto.
+- No hagas preguntas innecesarias.
 
-- Si el usuario hace una pregunta incompleta, debes completarla usando el último contexto.
+FORMATO:
+- Usa tablas SOLO si es necesario
+- HTML: <table>, <tr>, <td>, <th>
+- Máximo 1 tabla
 
-Ejemplo interno:
-"dame el listado de canciones" → "dame el listado de canciones de [último álbum mencionado]"
-
-- Responde directamente. No hagas preguntas innecesarias.
-
-
-REGLAS:
-
-- No respondas de forma genérica si el contexto ya define el tema.
-- No cambies de álbum/artista a menos que el usuario lo indique explícitamente.
-- No reutilices temas antiguos si ya hay uno más reciente.
-
-
-FORMATO DE RESPUESTA:
-
-- Responde en texto claro y directo.
-
-- SOLO usa tablas cuando sea necesario (ej: tracklists, comparaciones).
-- NO uses tablas para explicaciones simples.
-
-- Si usas tabla:
-  - Incluye una breve frase antes o después
-  - Usa HTML: <table>, <tr>, <td>, <th>
-  - No uses markdown
-
-- Máximo 1 tabla por respuesta.
-
-
-REGLAS DE SALIDA:
-
-- No expliques tu razonamiento.
-- No menciones contexto ni referencias internas.
-- No digas "entiendo que te refieres a..."
-- Responde directo como experto."
-
-Pregunta: ${pregunta}`,
+SALIDA:
+- No expliques contexto
+- No digas "entiendo que..."
+- Responde directo`,
+          },
+          ...chatHistory,
+        ],
       }),
     });
 
@@ -205,54 +179,23 @@ Pregunta: ${pregunta}`,
 
     const texto = data.output?.[0]?.content?.[0]?.text || "Sin respuesta";
 
-    /**
-     * =========================
-     * 2. DECIDIR SI GENERAR IMAGEN
-     * (ahorra $$$)
-     * =========================
-     */
-    const generarImagen =
-      pregunta.toLowerCase().includes("imagen") ||
-      pregunta.toLowerCase().includes("dibuja") ||
-      pregunta.toLowerCase().includes("visual") ||
-      pregunta.toLowerCase().includes("ilustración");
+    // Guardar respuesta del assistant
+    chatHistory.push({
+      role: "assistant",
+      content: texto,
+    });
 
-    let imagen = null;
-
-    /**
-     * =========================
-     * 3. GENERAR IMAGEN (OPCIONAL)
-     * =========================
-     */
-    if (generarImagen) {
-      const imageResponse = await fetch("https://api.openai.com/v1/images", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "gpt-image-1",
-          prompt: `Hip hop artwork: ${pregunta}`,
-          size: "1024x1024",
-        }),
-      });
-
-      const imageData = await imageResponse.json();
-
-      if (imageResponse.ok) {
-        imagen = imageData.data?.[0]?.b64_json;
-      }
+    // 🔥 LIMITAR HISTORIAL
+    if (chatHistory.length > 10) {
+      chatHistory = chatHistory.slice(-10);
     }
-
     /**
      * =========================
      * 4. RESPUESTA FINAL
      * =========================
      */
     res.json({
-      respuesta: texto,
-      imagen: imagen, // puede ser null si no se pidió imagen
+      respuesta: texto
     });
   } catch (error) {
     console.error("ERROR:", error);
