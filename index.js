@@ -183,15 +183,6 @@ FORMATO:
   - NO uses una sola columna
   - NO incluyas texto narrativo dentro de la tabla
 
-- Usa listas (<ul><li>) cuando el contenido sea:
-  • enumeraciones simples
-  • colaboradores
-  • productores
-  • características
-  • elementos sin estructura tabular
-
-- NO uses tablas para listas simples
-
 Ejemplo correcto:
 <table>
 <tr><th>#</th><th>Canción</th></tr>
@@ -239,7 +230,7 @@ SALIDA:
      * =========================
      */
     res.json({
-      respuesta: texto,
+      respuesta: texto
     });
   } catch (error) {
     console.error("ERROR:", error);
