@@ -99,14 +99,8 @@ app.get("/", (req, res) => {
  */
 app.post("/preguntar", async (req, res) => {
   try {
-    /**
-     * Extraer la pregunta del body
-     */
     const { pregunta } = req.body;
 
-    /**
-     * Validación de entrada
-     */
     if (!pregunta) {
       return res.status(400).json({
         error: "Falta la pregunta",
@@ -114,7 +108,9 @@ app.post("/preguntar", async (req, res) => {
     }
 
     /**
-     * Llamada a OpenAI API
+     * =========================
+     * 1. GENERAR TEXTO
+     * =========================
      */
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
@@ -164,36 +160,67 @@ Pregunta: ${pregunta}`,
       }),
     });
 
-    /**
-     * Convertir respuesta a JSON
-     */
     const data = await response.json();
 
-    /**
-     * Manejo de error de OpenAI
-     */
     if (!response.ok) {
       return res.status(500).json({
-        error: "Error de OpenAI",
+        error: "Error de OpenAI (texto)",
         detalle: data,
       });
     }
 
-    /**
-     * Extraer texto de la respuesta
-     */
-    const texto = data.output?.[0]?.content?.[0]?.text;
+    const texto = data.output?.[0]?.content?.[0]?.text || "Sin respuesta";
 
     /**
-     * Respuesta final al cliente
+     * =========================
+     * 2. DECIDIR SI GENERAR IMAGEN
+     * (ahorra $$$)
+     * =========================
+     */
+    const generarImagen =
+      pregunta.toLowerCase().includes("imagen") ||
+      pregunta.toLowerCase().includes("dibuja") ||
+      pregunta.toLowerCase().includes("visual") ||
+      pregunta.toLowerCase().includes("ilustración");
+
+    let imagen = null;
+
+    /**
+     * =========================
+     * 3. GENERAR IMAGEN (OPCIONAL)
+     * =========================
+     */
+    if (generarImagen) {
+      const imageResponse = await fetch("https://api.openai.com/v1/images", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "gpt-image-1",
+          prompt: `Hip hop artwork: ${pregunta}`,
+          size: "1024x1024",
+        }),
+      });
+
+      const imageData = await imageResponse.json();
+
+      if (imageResponse.ok) {
+        imagen = imageData.data?.[0]?.b64_json;
+      }
+    }
+
+    /**
+     * =========================
+     * 4. RESPUESTA FINAL
+     * =========================
      */
     res.json({
-      respuesta: texto || "Sin respuesta",
+      respuesta: texto,
+      imagen: imagen, // puede ser null si no se pidió imagen
     });
   } catch (error) {
-    /**
-     * Manejo de errores inesperados
-     */
     console.error("ERROR:", error);
 
     res.status(500).json({
