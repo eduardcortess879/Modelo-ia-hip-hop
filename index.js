@@ -131,7 +131,7 @@ app.post("/preguntar", async (req, res) => {
         input: [
           {
             role: "system",
-            content: `Eres un experto en cultura hip hop y rap.
+            content: `Eres un experto en cultura hip hop y rap de la escena americana o norteamericana y europa (canada y reino unido).
 
 Tu conocimiento incluye:
 - Historia del hip hop
